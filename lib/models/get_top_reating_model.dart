@@ -28,9 +28,15 @@ class TopRatingRooms {
   int? price;
   String? city;
   String? averageRating;
+  String? imgs;
 
   TopRatingRooms(
-      {this.sId, this.title, this.price, this.city, this.averageRating});
+      {this.sId,
+      this.title,
+      this.price,
+      this.city,
+      this.averageRating,
+      this.imgs});
 
   TopRatingRooms.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -38,6 +44,7 @@ class TopRatingRooms {
     price = json['price'];
     city = json['city'];
     averageRating = json['averageRating'].toString();
+    imgs = json['imgs'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +54,7 @@ class TopRatingRooms {
     data['price'] = this.price;
     data['city'] = this.city;
     data['averageRating'] = this.averageRating;
+    data['imgs'] = this.imgs;
     return data;
   }
 }

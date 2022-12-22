@@ -19,7 +19,7 @@ Map<String, String> myheaders2 = {
 class Curd {
   getrequest(String url) async {
     try {
-      Response respos = await http.get(Uri.parse(url));
+      Response respos = await http.get(Uri.parse(url), headers: myheaders2);
       if (respos.statusCode == 200) {
         dynamic body = jsonDecode(respos.body);
         return body;
@@ -71,6 +71,30 @@ class Curd {
     } catch (e) {
       print('ERorr $e');
       return StatusRequest.erorr;
+    }
+  }
+
+  putrequestforFile(
+    String url,
+    Map data,
+    File file,
+  ) async {
+    MultipartRequest requst = http.MultipartRequest('Post', Uri.parse(url));
+    int length = await file.length();
+    ByteStream stream = http.ByteStream(file.openRead());
+    MultipartFile multefile = http.MultipartFile('uploads', stream, length,
+        filename: basename(file.path));
+    requst.headers.addAll(myheaders2);
+    requst.files.add(multefile);
+    data.forEach((key, value) {
+      requst.fields[key] = value;
+    });
+    StreamedResponse myrequest = await requst.send();
+    Response response = await http.Response.fromStream(myrequest);
+    if (myrequest.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      print('erorrrrrr');
     }
   }
 

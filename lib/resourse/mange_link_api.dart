@@ -15,7 +15,9 @@ class MangeAPi {
   static const String updateUser = "$baseurl/api/users/updateUser"; //id user
   static const String getinfoRatingandBoking =
       "$baseurl/api/rooms/getRoom"; //id room
-  static const String getdatabycities = "$baseurl/api/rooms/getCity";
+  static const String getdatabycities = "$baseurl/api/rooms/getCity"; //idcity
+  static const String getInfoUser =
+      "$baseurl/api/users/getUserInformation"; //id user
 
   ///63a121b56cc98ab64c281828 : auth
 }

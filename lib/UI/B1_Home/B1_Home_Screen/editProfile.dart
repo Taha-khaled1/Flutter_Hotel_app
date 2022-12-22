@@ -1,11 +1,35 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hotelbooking/ShardFunction/valid.dart';
 import 'package:hotelbooking/UI/handlingView/handlingview.dart';
 import 'package:hotelbooking/controller/edit_profile_controller.dart';
+import 'package:image_picker/image_picker.dart';
 
-class EditProfile extends StatelessWidget {
-  const EditProfile({super.key});
+class EditProfile extends StatefulWidget {
+  EditProfile({super.key});
+
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  final ImagePicker picker = ImagePicker();
+
+  File? image;
+
+  Future pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+      final imageTemp = File(image.path);
+      setState(() => this.image = imageTemp);
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +85,38 @@ class EditProfile extends StatelessWidget {
                 ),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Get.defaultDialog(
+                    title: "",
+                    middleText: "Hello world!",
+                    content: Container(
+                      child: Column(
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              pickImage(ImageSource.gallery);
+                            },
+                            title: Text('اختار صوره من المعرض'),
+                            leading: Icon(Icons.photo),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ListTile(
+                            onTap: () {
+                              pickImage(ImageSource.camera);
+                            },
+                            title: Text('اختار صوره من الكاميرا'),
+                            leading: Icon(Icons.camera),
+                          ),
+                        ],
+                      ),
+                    ),
+                    backgroundColor: Colors.grey[300],
+                    titleStyle: TextStyle(color: Colors.white),
+                    middleTextStyle: TextStyle(color: Colors.white),
+                  );
+                },
                 child: CircleAvatar(
                   radius: 20,
                   backgroundColor: Colors.grey,
@@ -85,74 +140,102 @@ class EditProfile extends StatelessWidget {
               ),
               child: Form(
                 key: editProfileController.formkeyedit,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 50.0,
-                    ),
-                    TextFieldEditing(
-                      hint: 'mohamed',
-                      onSaved: (p0) {
-                        editProfileController.username = p0!;
-                      },
-                      validator: (p0) {
-                        return validInput(p0.toString(), 2, 50, 'username');
-                      },
-                      titels: 'User name',
-                    ),
-                    Divider(
-                      color: Colors.black12.withOpacity(0.1),
-                      height: 0.3,
-                    ),
-                    TextFieldEditing(
-                      hint: 'mohamed@gmail.com',
-                      onSaved: (p0) {
-                        editProfileController.email = p0!;
-                      },
-                      validator: (p0) {
-                        return validInput(p0.toString(), 5, 100, 'email');
-                      },
-                      titels: 'Email',
-                    ),
-                    Divider(
-                      color: Colors.black12.withOpacity(0.1),
-                      height: 0.3,
-                    ),
-                    TextFieldEditing(
-                      hint: '0123456789',
-                      onSaved: (p0) {
-                        editProfileController.phone = p0!;
-                      },
-                      validator: (p0) {
-                        return validInput(
-                          p0.toString(),
-                          4,
-                          50,
-                          'phone',
-                        );
-                      },
-                      titels: 'Phone',
-                    ),
-                    Divider(
-                      color: Colors.black12.withOpacity(0.1),
-                      height: 1.2,
-                    ),
-                    TextFieldEditing(
-                      hint: 'Egypt',
-                      onSaved: (p0) {
-                        editProfileController.countery = p0!;
-                      },
-                      validator: (p0) {
-                        return validInput(
-                          p0.toString(),
-                          2,
-                          50,
-                          'city',
-                        );
-                      },
-                      titels: 'Citey',
-                    ),
-                  ],
+                child: GetBuilder<EditProfileController>(
+                  builder: (controller) {
+                    return HandlingDataView(
+                      statusRequest: controller.statusRequest1,
+                      widget: Column(
+                        children: [
+                          const SizedBox(
+                            height: 50.0,
+                          ),
+                          TextFieldEditing(
+                            hint: controller.infousetModel?.message!.username ??
+                                'mohamed',
+                            onSaved: (p0) {
+                              editProfileController.username = p0!;
+                            },
+                            validator: (p0) {
+                              return validInput(
+                                  p0.toString(), 2, 50, 'username');
+                            },
+                            titels: 'User name',
+                          ),
+                          Divider(
+                            color: Colors.black12.withOpacity(0.1),
+                            height: 0.3,
+                          ),
+                          TextFieldEditing(
+                            hint: controller.infousetModel?.message!.email ??
+                                'moahamed@gmaoil.com',
+                            onSaved: (p0) {
+                              editProfileController.email = p0!;
+                            },
+                            validator: (p0) {
+                              return validInput(p0.toString(), 5, 100, 'email');
+                            },
+                            titels: 'Email',
+                          ),
+                          Divider(
+                            color: Colors.black12.withOpacity(0.1),
+                            height: 0.3,
+                          ),
+                          TextFieldEditing(
+                            hint: controller.infousetModel?.message!.phone ??
+                                '0123456789',
+                            onSaved: (p0) {
+                              editProfileController.phone = p0!;
+                            },
+                            validator: (p0) {
+                              return validInput(
+                                p0.toString(),
+                                4,
+                                50,
+                                'phone',
+                              );
+                            },
+                            titels: 'Phone',
+                          ),
+                          Divider(
+                            color: Colors.black12.withOpacity(0.1),
+                            height: 1.2,
+                          ),
+                          TextFieldEditing(
+                            hint: controller.infousetModel?.message!.country ??
+                                'Egypt',
+                            onSaved: (p0) {
+                              editProfileController.countery = p0!;
+                            },
+                            validator: (p0) {
+                              return validInput(
+                                p0.toString(),
+                                2,
+                                50,
+                                'country',
+                              );
+                            },
+                            titels: 'Country',
+                          ),
+                          TextFieldEditing(
+                            hint: controller.infousetModel?.message!.city ??
+                                'cairo',
+                            onSaved: (p0) {
+                              editProfileController.countery = p0!;
+                            },
+                            validator: (p0) {
+                              return validInput(
+                                p0.toString(),
+                                2,
+                                50,
+                                'city',
+                              );
+                            },
+                            titels: 'City',
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

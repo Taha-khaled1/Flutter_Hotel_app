@@ -311,10 +311,13 @@ class cardLastActivity extends StatelessWidget {
                         borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(7.0),
                             topRight: Radius.circular(7.0)),
-                        // image: DecorationImage(
-                        //   image: AssetImage(searchesModel.img!),
-                        //   fit: BoxFit.cover,
-                        // ),
+                        image: DecorationImage(
+                          image: NetworkImage(searchesModel!.imgs == null ||
+                                  searchesModel!.imgs == ""
+                              ? 'https://akm-img-a-in.tosshub.com/businesstoday/images/story/202204/ezgif-sixteen_nine_161.jpg?size=948:533'
+                              : "${MangeAPi.baseurl}/${searchesModel!.imgs}"),
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),

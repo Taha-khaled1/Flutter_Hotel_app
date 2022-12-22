@@ -106,39 +106,6 @@ class _destinationState extends State<destination> {
       ],
     );
 
-    var _recommended = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        const Padding(
-          padding: EdgeInsets.only(left: 22.0),
-          child: Text(
-            "Recommended",
-            style: TextStyle(
-                fontFamily: "Sofia",
-                fontSize: 20.0,
-                fontWeight: FontWeight.w700),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 5.0),
-          child: Container(
-            child: ListView.builder(
-              shrinkWrap: true,
-              primary: false,
-              itemBuilder: (ctx, index) {
-                return cardList(travelDataDummy[index]);
-              },
-              itemCount: travelDataDummy.length,
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 20.0,
-        ),
-      ],
-    );
-
     return Scaffold(
       appBar: _appBar,
       backgroundColor: Colors.white,
@@ -171,13 +138,56 @@ class _destinationState extends State<destination> {
                   TopDestinationWidget(controller: controller),
 
                   /// Recommended
-                  _recommended,
+                  RecomendedWidget(controller: controller),
                 ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class RecomendedWidget extends StatelessWidget {
+  const RecomendedWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+  final GetDataCityController controller;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const Padding(
+          padding: EdgeInsets.only(left: 22.0),
+          child: Text(
+            "Recommended",
+            style: TextStyle(
+                fontFamily: "Sofia",
+                fontSize: 20.0,
+                fontWeight: FontWeight.w700),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 5.0),
+          child: Container(
+            child: ListView.builder(
+              shrinkWrap: true,
+              primary: false,
+              itemCount: controller.infocityModel?.places!.length,
+              itemBuilder: (ctx, index) {
+                return cardList(controller.infocityModel!.places![index]);
+              },
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20.0,
+        ),
+      ],
     );
   }
 }
@@ -206,8 +216,10 @@ class TopDestinationWidget extends StatelessWidget {
         ),
         const SizedBox(height: 5.0),
         Container(
-          height: 320.0,
+          height: 330.0,
           child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
             itemCount: controller.infocityModel?.topDestination!.length,
             itemBuilder: (BuildContext context, int index) {
               return TopDestinationCard(
@@ -300,7 +312,7 @@ class cardList extends StatelessWidget {
     fontWeight: FontWeight.w600,
   );
 
-  travelListData hotelData;
+  Places hotelData;
 
   cardList(this.hotelData);
   Widget build(BuildContext context) {
@@ -326,7 +338,12 @@ class cardList extends StatelessWidget {
                   topRight: Radius.circular(10.0),
                   topLeft: Radius.circular(10.0)),
               image: DecorationImage(
-                  image: AssetImage(hotelData.img!), fit: BoxFit.cover),
+                  image: NetworkImage(
+                    hotelData.imgs == null || hotelData.imgs == ""
+                        ? 'https://akm-img-a-in.tosshub.com/businesstoday/images/story/202204/ezgif-sixteen_nine_161.jpg?size=948:533'
+                        : "${MangeAPi.baseurl}/${hotelData.imgs}",
+                  ),
+                  fit: BoxFit.cover),
             ),
             alignment: Alignment.topRight,
           ),
@@ -343,7 +360,7 @@ class cardList extends StatelessWidget {
                       Container(
                           width: 220.0,
                           child: Text(
-                            hotelData.name!,
+                            hotelData.title ?? ' Hotel name',
                             style: _txtStyleTitle,
                             overflow: TextOverflow.ellipsis,
                           )),
@@ -351,12 +368,13 @@ class cardList extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           ratingbar(
-                            starRating: hotelData.rating,
+                            starRating: double.parse(
+                                hotelData.averageRating.toString()),
                             color: Colors.blueAccent,
                           ),
                           const Padding(padding: EdgeInsets.only(left: 5.0)),
                           Text(
-                            "(" + hotelData.rating.toString() + ")",
+                            "(" + hotelData.averageRating.toString() + ")",
                             style: _txtStyleSub,
                           )
                         ],
@@ -373,7 +391,7 @@ class cardList extends StatelessWidget {
                               color: Colors.black26,
                             ),
                             const Padding(padding: EdgeInsets.only(top: 3.0)),
-                            Text(hotelData.location!, style: _txtStyleSub)
+                            Text(hotelData.city ?? 'نابلس', style: _txtStyleSub)
                           ],
                         ),
                       )
@@ -387,7 +405,7 @@ class cardList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "\$" + hotelData.price!,
+                        "\$" + hotelData.price.toString(),
                         style: const TextStyle(
                             fontSize: 25.0,
                             color: Colors.blueAccent,
@@ -437,13 +455,13 @@ class TopDestinationCard extends StatelessWidget {
           //               '${MangeAPi.baseurl}/${topDestination.imgs}'),
           //           fit: BoxFit.cover),
 
-          Image.network(
-            '${MangeAPi.baseurl}/${topDestination.imgs}',
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Text('data');
-            },
-          ),
+          // Image.network(
+          //   '${MangeAPi.baseurl}/${topDestination.imgs}',
+          //   fit: BoxFit.cover,
+          //   errorBuilder: (context, error, stackTrace) {
+          //     return Text('data');
+          //   },
+          // ),
           const SizedBox(
             height: 5.0,
           ),
