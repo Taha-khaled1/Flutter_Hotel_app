@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hotelbooking/ShardFunction/handling.dart';
@@ -12,7 +14,6 @@ class EditProfileController extends GetxController {
   StatusRequest statusRequest = StatusRequest.none;
   final GlobalKey<FormState> formkeyedit = GlobalKey();
   String? email, image, countery, phone, username;
-
   late StatusRequest statusRequest1;
   GetInfoUserModel? infousetModel;
   getInfoProfile() async {
@@ -36,7 +37,7 @@ class EditProfileController extends GetxController {
     super.onInit();
   }
 
-  updateUser() async {
+  updateUser(File? isfile) async {
     if (formkeyedit.currentState!.validate()) {
       formkeyedit.currentState!.save();
       statusRequest = StatusRequest.loading;
@@ -44,19 +45,22 @@ class EditProfileController extends GetxController {
       var response = await updetUserRespons(
         country: countery,
         email: email,
-        imgs: image,
         phone: phone,
         username: username,
+        isfile: isfile,
       );
+      print('file : $isfile');
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
         Get.to(() => Home());
 
         showsnackBar('تم تحديث المعلومات بنجاح');
+        Get.delete<EditProfileController>();
       } else {
         Get.to(() => Home());
 
         showsnackBar('لم يتم تحديث المعلومات');
+        Get.delete<EditProfileController>();
       }
       update();
     } else {

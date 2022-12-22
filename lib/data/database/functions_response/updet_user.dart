@@ -22,7 +22,6 @@ updetUserRespons({
             'username': username,
             'country': country,
             'phone': phone,
-            'imgs': 'imgs',
             'email': sharedPreferences.getString('email'),
           },
         )
@@ -32,7 +31,7 @@ updetUserRespons({
             'username': username,
             'country': country,
             'phone': phone,
-            'imgs': 'imgs',
+            'imgs[]': isfile.path,
             'email': sharedPreferences.getString('email'),
           },
           isfile,

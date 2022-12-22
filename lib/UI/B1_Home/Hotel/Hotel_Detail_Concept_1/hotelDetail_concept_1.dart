@@ -282,34 +282,13 @@ class RelatedRoomsWidget extends StatelessWidget {
             itemCount: controller.infoRoomModel?.relatedRooms!.length,
             itemBuilder: (BuildContext context, int index) {
               return _relatedPost(
-                "assets/image/room/room7.jpg",
+                controller.infoRoomModel?.relatedRooms![index].imgs,
                 controller.infoRoomModel?.relatedRooms![index].title,
                 controller.infoRoomModel?.relatedRooms![index].city,
                 controller.infoRoomModel?.relatedRooms![index].averageRating,
               );
             },
           ),
-          // child: ListView(
-          //   scrollDirection: Axis.horizontal,
-          //   children: <Widget>[
-          //     const SizedBox(
-          //       width: 10.0,
-          //     ),
-          // _relatedPost("assets/image/room/room7.jpg", "The Cheeses Guide",
-          //     "87 Botsford", "4,3"),
-          //     _relatedPost("assets/image/room/room8.jpg", "Garage Bar Seafood",
-          //         "Gilison London", "4,1"),
-          //     _relatedPost("assets/image/room/room9.jpg",
-          //         "Spagheti Kilimanjaro", "Netherland", "4,2"),
-          //     _relatedPost("assets/image/room/room10.jpg", "Gangtok Vegetable",
-          //         "Nepal", "4,7"),
-          //     _relatedPost("assets/image/room/room11.jpg", "Soup Caikaki",
-          //         "Orlando", "4,5"),
-          //     const SizedBox(
-          //       width: 10.0,
-          //     ),
-          //   ],
-          // ),
         ),
         const SizedBox(
           height: 40.0,
@@ -847,7 +826,8 @@ Widget _photo(String image) {
   );
 }
 
-Widget _relatedPost(String image, title, location, ratting) {
+Widget _relatedPost(
+    String? image, String? title, String? location, String? ratting) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -858,8 +838,12 @@ Widget _relatedPost(String image, title, location, ratting) {
           height: 110.0,
           width: 180.0,
           decoration: BoxDecoration(
-              image:
-                  DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+              image: DecorationImage(
+                image: NetworkImage(image == null || image == ""
+                    ? 'https://akm-img-a-in.tosshub.com/businesstoday/images/story/202204/ezgif-sixteen_nine_161.jpg?size=948:533'
+                    : "${MangeAPi.baseurl}/$image"),
+                fit: BoxFit.cover,
+              ),
               color: Colors.black12,
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               boxShadow: [
@@ -873,7 +857,7 @@ Widget _relatedPost(String image, title, location, ratting) {
           height: 5.0,
         ),
         Text(
-          title,
+          title ?? 'titel',
           style: const TextStyle(
               fontFamily: "Sofia",
               fontWeight: FontWeight.w600,
@@ -893,7 +877,7 @@ Widget _relatedPost(String image, title, location, ratting) {
               color: Colors.black12,
             ),
             Text(
-              location,
+              location ?? 'Loction',
               style: const TextStyle(
                   fontFamily: "Sofia",
                   fontWeight: FontWeight.w500,
@@ -915,7 +899,7 @@ Widget _relatedPost(String image, title, location, ratting) {
             Padding(
               padding: const EdgeInsets.only(top: 3.0),
               child: Text(
-                ratting,
+                ratting ?? '4',
                 style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontFamily: "Sofia",

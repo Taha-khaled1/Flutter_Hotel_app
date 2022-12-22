@@ -79,10 +79,10 @@ class Curd {
     Map data,
     File file,
   ) async {
-    MultipartRequest requst = http.MultipartRequest('Post', Uri.parse(url));
+    MultipartRequest requst = http.MultipartRequest('Put', Uri.parse(url));
     int length = await file.length();
     ByteStream stream = http.ByteStream(file.openRead());
-    MultipartFile multefile = http.MultipartFile('uploads', stream, length,
+    MultipartFile multefile = http.MultipartFile('uploads/', stream, length,
         filename: basename(file.path));
     requst.headers.addAll(myheaders2);
     requst.files.add(multefile);
@@ -91,6 +91,9 @@ class Curd {
     });
     StreamedResponse myrequest = await requst.send();
     Response response = await http.Response.fromStream(myrequest);
+    print('-----------------------------------------');
+    print(response.body);
+    print(response.statusCode);
     if (myrequest.statusCode == 200) {
       return jsonDecode(response.body);
     } else {

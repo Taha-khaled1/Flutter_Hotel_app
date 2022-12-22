@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:hotelbooking/UI/B1_Home/House/HouseList.dart';
 import 'package:hotelbooking/UI/B2_Message/AppBar_ItemScreen/notificationAppbar.dart';
-import 'package:hotelbooking/UI/IntroApps/Login.dart';
 import 'package:hotelbooking/UI/IntroApps/Login.dart';
 import 'package:hotelbooking/UI/pages/change_password.dart';
 import 'package:hotelbooking/UI/pages/helps.dart';
 import 'package:hotelbooking/UI/pages/invite_friend.dart';
 import 'package:hotelbooking/main.dart';
-
 import 'ListProfile/CallCenter.dart';
-import 'ListProfile/SettingAcount.dart';
-import 'ListProfile/addCreditCard.dart';
-import 'ListProfile/category.dart';
-import 'ListProfile/profileUser.dart';
 
 class profile extends StatefulWidget {
   profile({Key? key}) : super(key: key);
@@ -52,11 +44,6 @@ class _profileState extends State<profile> {
                           height: 90.0,
                           width: 90.0,
                           decoration: BoxDecoration(
-                            // image: const DecorationImage(
-                            //     image: AssetImage(
-                            //       "assets/image/profile/profile3.jpg",
-                            //     ),
-                            //     fit: BoxFit.cover),
                             color: Colors.white,
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50.0),
