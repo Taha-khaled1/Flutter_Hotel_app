@@ -19,5 +19,6 @@ class MangeAPi {
   static const String getInfoUser =
       "$baseurl/api/users/getUserInformation"; //id user
 
+  static const String searchBytext = "$baseurl/api/rooms/roomSearch"; //id user
   ///63a121b56cc98ab64c281828 : auth
 }

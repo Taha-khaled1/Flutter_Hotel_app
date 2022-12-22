@@ -16,14 +16,27 @@ Map<String, String> myheaders2 = {
       'access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYTEyMWI1NmNjOThhYjY0YzI4MTgyOCIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2NzE1NTI0OTN9.J_6IKlm8_vBUI3lMrhWZVLRjHuEMnYkKPew7X4UhFLo; Path=/;'
 };
 
+Map<String, String> myheaders3 = {
+  'Content-Type': 'application/json',
+  'Cookie':
+      'access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYTEyMWI1NmNjOThhYjY0YzI4MTgyOCIsImlzQWRtaW4iOmZhbHNlLCJpYXQiOjE2NzE1NTI0OTN9.J_6IKlm8_vBUI3lMrhWZVLRjHuEMnYkKPew7X4UhFLo; Path=/;'
+};
+
 class Curd {
   getrequest(String url) async {
     try {
-      Response respos = await http.get(Uri.parse(url), headers: myheaders2);
+      Response respos = await http.get(Uri.parse(url), headers: myheaders3);
+      print('============');
+      print(respos.body);
+      print(respos.statusCode);
+      print('============');
       if (respos.statusCode == 200) {
         dynamic body = jsonDecode(respos.body);
+        print(' body :  $body');
         return body;
-      } else {}
+      } else {
+        print('erorr');
+      }
     } catch (e) {
       // ignore: avoid_print
       print('$e');

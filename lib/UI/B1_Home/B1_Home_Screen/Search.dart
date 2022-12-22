@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hotelbooking/data/database/functions_response/get_cities%20copy.dart';
+import 'package:hotelbooking/main.dart';
 
 class search extends StatefulWidget {
   @override
@@ -34,10 +36,10 @@ class _searchState extends State<search> {
     elevation: 0.0,
   );
 
-  var _textHello = const Padding(
+  var _textHello = Padding(
     padding: EdgeInsets.only(right: 50.0, left: 20.0),
     child: Text(
-      "Hello, Alice. \nWhat would you like to search ?",
+      "Hello, ${sharedPreferences.getString('username') ?? 'ahmed'}. \nWhat would you like to search ?",
       style: TextStyle(
           letterSpacing: 0.1,
           fontWeight: FontWeight.w600,
@@ -156,19 +158,29 @@ class _searchState extends State<search> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 15.0),
-            child: Container(
-              height: 50.0,
-              decoration: const BoxDecoration(
-                color: Colors.deepPurpleAccent,
-              ),
-              child: const Center(
-                child: Text(
-                  "Search",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15.0,
-                      fontFamily: "Gotik",
-                      fontWeight: FontWeight.w800),
+            child: InkWell(
+              onTap: () {
+                try {
+                  getSearchbytextRespon();
+                } catch (e) {
+                  print(e);
+                }
+                print('------------------');
+              },
+              child: Container(
+                height: 50.0,
+                decoration: const BoxDecoration(
+                  color: Colors.deepPurpleAccent,
+                ),
+                child: const Center(
+                  child: Text(
+                    "Search",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15.0,
+                        fontFamily: "Gotik",
+                        fontWeight: FontWeight.w800),
+                  ),
                 ),
               ),
             ),
